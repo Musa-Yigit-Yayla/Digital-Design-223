@@ -1,0 +1,469 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/16/2022 10:02:35 PM
+// Design Name: 
+// Module Name: LabCalculator
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module and3(input A0, B0, C0, output Cout);
+    //reg A0, B0, C0;
+    wire a1;
+    and(a1, A0, B0);
+    and(Cout, a1, C0);
+    
+endmodule
+
+module LabCalculator(input A0, B0, C0, D0, output Y, Z);
+
+/*(
+    
+    input A,
+    input B,
+    input C,
+    input D,
+    output Y,
+    output Z
+    
+    assign Y = (A ^ B) | (~A & ~C & D);
+    assign Z = (D & ~A &B) | (A & B & ~D);
+    );*/
+    
+    //reg A0, B0, C0, D0;
+    wire a1, a2, a3, a4;
+    wire b1, b2, b3;
+    xor(a1, A0, B0);
+    
+    //and3 and3_a(a2,~A0, ~C0,D0);
+    //and3 and3_b(a3,D0, ~A0, B0);
+    //and3 and3_c(a4, A0, ~D0, B0);
+    
+    and(b1, ~A0, ~C0);
+    and(a2,b1, D0);
+    
+    and(b2, D0,~A0);
+    and (a3, ~C0, b2);
+    
+    and(b3, A0, ~D0);
+    and(a4, b3, B0);
+      
+    assign Y = a1 | a2;
+    assign Z = a3 | a4;
+    //or(Y, a1, a2);
+    //or(Z, a3, a4);
+    
+endmodule
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/17/2022 11:03:22 PM
+// Design Name: 
+// Module Name: lab_calculator_testbench
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module lab_calculator_testbench();
+reg A0, B0, C0, D0;
+wire Y, Z;
+
+LabCalculator calc(
+    .A0(A0),
+    .B0(B0),
+    .C0(C0),
+    .D0(D0),
+    .Y(Y),
+    .Z(Z)
+    );
+    
+initial begin
+ A0 = 0; B0 = 0; C0 = 0; D0 = 0; #50;
+     A0 = 0; B0 = 0; C0 = 0; D0 = 1; #50;
+     A0 = 0; B0 = 0; C0 = 1; D0 = 0; #50;
+     A0 = 0; B0 = 0; C0 = 1; D0 = 1; #50;
+     
+     A0 = 0; B0 = 1; C0 = 0; D0 = 0; #50;
+     A0 = 0; B0 = 1; C0 = 0; D0 = 1; #50;
+     A0 = 0; B0 = 1; C0 = 1; D0 = 0; #50;
+     A0 = 0; B0 = 1; C0 = 1; D0 = 1; #50;
+     
+     A0 = 1; B0 = 0; C0 = 0; D0 = 0; #50;
+           A0 = 1; B0 = 0; C0 = 0; D0 = 1; #50;
+           A0 = 1; B0 = 0; C0 = 1; D0 = 0; #50;
+           A0 = 1; B0 = 0; C0 = 1; D0 = 1; #50;
+           
+    A0 = 1; B0 = 1; C0 = 0; D0 = 0; #50;
+                 A0 = 1; B0 = 1; C0 = 0; D0 = 1; #50;
+                 A0 = 1; B0 = 1; C0 = 1; D0 = 0; #50;
+                 A0 = 1; B0 = 1; C0 = 1; D0 = 1; #50;
+end
+
+endmodule
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/17/2022 10:37:15 PM
+// Design Name: 
+// Module Name: 2bit_adder_testbench
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module bit_adder_testbench();
+    reg A0, B0,C, A1, B1;
+    wire Y, Z, T;
+    
+    /*BitAdder uut(
+    .A0(A0), 
+    .B0(B0), 
+    .A1(A1), 
+    .B1(B1),
+     .Q0(Q0),
+      .Q1(Q1), 
+      .C0(C0));*/
+      BitAdder uut(A0, B0,C, A1, B1, Y, Z, T);
+      
+      initial begin
+      #100;
+      A0 = 0; B0 = 0; C = 0; A1 = 0; B1 = 0; #100;
+      A0 = 0; B0 = 0; C = 0; A1 = 0; B1 = 1; #100;
+      A0 = 0; B0 = 0; C = 0; A1 = 1; B1 = 0; #100;
+      A0 = 0; B0 = 0; C = 0; A1 = 1; B1 = 1; #100;
+      
+      A0 = 0; B0 = 0; C = 1; A1 = 0; B1 = 0; #100;
+      A0 = 0; B0 = 1; C = 1;A1 = 0; B1 = 1; #100;
+      A0 = 0; B0 = 1; C = 1;A1 = 1; B1 = 0; #100;
+      A0 = 0; B0 = 1; C = 1;A1 = 1; B1 = 1; #100;
+      
+      A0 = 1; B0 = 1; C = 0;A1 = 0; B1 = 0; #100;
+            A0 = 1; B0 = 1; C = 0; A1 = 0; B1 = 1; #100;
+            A0 = 1; B0 = 1; C = 0; A1 = 1; B1 = 0; #100;
+            A0 = 1; B0 = 1; C = 0; A1 = 1; B1 = 1; #100;
+            
+     A0 = 1; B0 = 1; C = 1; A1 = 0; B1 = 0; #100;
+                  A0 = 1; B0 = 1; C = 1; A1 = 0; B1 = 1; #100;
+                  A0 = 1; B0 = 1; C = 1; A1 = 1; B1 = 0; #100;
+                  A0 = 1; B0 = 1;  C = 1;A1 = 1; B1 = 1; #100;
+     end
+endmodule
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/16/2022 09:54:49 PM
+// Design Name: 
+// Module Name: 2BitAdder
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+/*module BitAdder(input A0, B0, A1, B1, output Q0, Q1, C0);
+    wire a1, a2, a3, a4;
+    xor(Q0, A0, B0);
+    and(a1, A0, B0);
+    xor(a2, A1, B1);
+    or(a3, A1, B1);
+    and(a4, a1, a2);
+    xor(Q1, a1, a2);
+    or(C0, a4, a3);
+endmodule*/
+module FullAdder(input X1, X2, Cin, output S, Cout);
+    wire a1, a2, a3;
+    xor u1(a1,X1,X2);
+    and u2(a2, X1,X2);
+    and u3(a3,a1,Cin);
+    or u4(Cout, a2, a3);
+    xor u5(S, a1, Cin);
+endmodule
+    
+module BitAdder(input A0, B0, C, A1, B1, output Y, Z, T);
+    wire Cin;
+    FullAdder uut(A0, B0, C, Y ,Cin);
+    FullAdder uut1( Cin, A1, B1, Z, T );
+    /*(
+    input A0,
+    input B0,
+    input A1,
+    input B1,
+    output Q0,
+    output Q1,
+    output C0
+    
+    assign Q0 = A0 ^ B0;
+    assign Q1 = (A0 & B0) ^ (A1 ^ B1);
+    assign C0 = ((A0 & B0) & (A1 ^ B1)) | (A1 & B1);
+    );*/
+endmodule 
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/16/2022 09:33:10 PM
+// Design Name: 
+// Module Name: FullAdder
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+/*module FullAdder(
+    input A,
+    input B,
+    input Cin,
+    output S,
+    output Cout
+    //assign S = (A ^ B) ^ Cin;
+    //assign Cout = (Cin & (A ^ B)) | (A & B);
+    );
+endmodule*/
+module FullAdder(input X1, X2, Cin, output S, Cout);
+    wire a1, a2, a3;
+    xor u1(a1,X1,X2);
+    and u2(a2, X1,X2);
+    and u3(a3,a1,Cin);
+    or u4(Cout, a2, a3);
+    xor u5(S, a1, Cin);
+endmodule
+    
+    //assign S = (A ^ B) ^ Cin;
+    //assign Cout = (Cin & (A ^ B)) | (A & B);
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/17/2022 10:23:23 PM
+// Design Name: 
+// Module Name: full_adder_testbench
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module full_adder_testbench();  
+    reg A, B, Cin;
+    wire S, Cout;
+    FullAdder uut(.X1(A), .X2(B), .Cin(Cin), .S(S), .Cout(Cout));
+    initial begin
+    A = 0; B = 0; Cin = 0; #100;
+    A = 0; B = 0; Cin = 1; #100;
+    A = 0; B = 1; Cin = 0; #100;
+    A = 0; B = 1; Cin = 1; #100;
+    A = 1; B = 0; Cin = 0; #100;
+    A = 1; B = 0; Cin = 1; #100;
+    A = 1; B = 1; Cin = 0; #100;
+    A = 1; B = 1; Cin = 0; #100;
+    A = 1; B = 1; Cin = 1; #100;
+    end
+ endmodule
+ 
+    
+
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/16/2022 09:30:57 PM
+// Design Name: 
+// Module Name: HalfSubtractor
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module HalfSubtractor(A,B,Difference,Borrow);//(
+    input A, B;
+    output Difference, Borrow;
+    assign Difference = A ^ B;
+    assign Borrow = ~A & B;
+    //xor(Difference, A, B);
+    //and(Borrow, ~A, B);
+    //);
+endmodule
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/17/2022 09:45:42 PM
+// Design Name: 
+// Module Name: half_subtractor_testbench
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module half_subtractor_testbench(
+
+    );
+    reg a, b;
+    wire difference, borrow;
+    
+    HalfSubtractor uut(a,b,difference,borrow);
+    
+    initial begin
+    #100;
+    a = 0; b = 0; #10;
+        b = 1; #10;
+        a = 1; b = 0; #10;
+        b = 1; #10;
+        end
+ endmodule
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/17/2022 09:15:50 PM
+// Design Name: 
+// Module Name: half_adder_testbench
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module half_adder_testbench(
+
+    );
+reg a, b;
+wire s, c;
+
+HalfAdder dut(a,b,s,c);
+    initial begin
+    a = 0; b = 0; #100;
+    b = 1; #100;
+    a = 1; b = 0; #100;
+    b = 1; #100;
+    end
+endmodule
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 10/16/2022 09:25:46 PM
+// Design Name: 
+// Module Name: HalfAdder
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module HalfAdder(A,B,S,C);
+    /*input A,
+    input B,
+    output S,
+    output C
+    assign S = (A ^ B);
+    assign C = A & B;*/
+    input A, B;
+    output S, C;
+    
+    xor x1(S, A, B);
+    and a1(C, A, B);
+endmodule
